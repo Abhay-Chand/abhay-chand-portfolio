@@ -1,12 +1,15 @@
 "use client";
 
-import { useState } from "react";
-
-type Theme = "light" | "dark";
+import { useSyncExternalStore } from "react";
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>(() =>
-    typeof window !== "undefined" && document.documentElement.dataset.theme === "dark" ? "dark" : "light"
+  const theme = useSyncExternalStore(
+    (onStoreChange) => {
+      window.addEventListener("portfolio-theme-change", onStoreChange);
+      return () => window.removeEventListener("portfolio-theme-change", onStoreChange);
+    },
+    () => (document.documentElement.dataset.theme === "dark" ? "dark" : "light"),
+    () => "light"
   );
 
   function toggleTheme() {
@@ -14,7 +17,7 @@ export function ThemeToggle() {
     document.documentElement.classList.add("theme-transition");
     document.documentElement.dataset.theme = next;
     window.localStorage.setItem("portfolio-theme", next);
-    setTheme(next);
+    window.dispatchEvent(new Event("portfolio-theme-change"));
     window.setTimeout(() => document.documentElement.classList.remove("theme-transition"), 320);
   }
 
