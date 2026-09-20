@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #f3f2ed;
+  --ink: #14181c;
+  --slate: #5b6470;
+  --slate-light: #d8d4c8;
+  --signal-ai: #2b7665;
+  --signal-ai-tint: #e4efec;
+  --signal-data: #905e21;
+  --signal-data-tint: #f3e9dc;
+  --line: #d8d4c8;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-slate: var(--slate);
+  --color-slate-light: var(--slate-light);
+  --color-signal-ai: var(--signal-ai);
+  --color-signal-ai-tint: var(--signal-ai-tint);
+  --color-signal-data: var(--signal-data);
+  --color-signal-data-tint: var(--signal-data-tint);
+  --color-line: var(--line);
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+::selection {
+  background: var(--signal-ai);
+  color: var(--paper);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
