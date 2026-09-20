@@ -19,34 +19,33 @@ type Project = {
   coverImageUrl: string | null;
 };
 
-export function ProjectRow({ project }: { project: Project }) {
-  const [open, setOpen] = useState(false);
+export function ProjectRow({ project, defaultOpen = false }: { project: Project; defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
   const panelId = `project-panel-${project.slug}`;
 
   return (
-    <div className="border-b border-line last:border-b-0">
+    <div className="project-row border-b border-line last:border-b-0">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-controls={panelId}
-        className="w-full text-left py-6 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 group"
+        className="project-trigger w-full text-left py-6 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 group"
       >
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-3 flex-wrap mb-1.5">
             <CategoryTag category={project.category} />
           </div>
-          <h3 className="font-display text-xl sm:text-2xl leading-snug group-hover:opacity-70 transition-opacity">
+          <h3 className="font-display text-xl sm:text-2xl leading-snug group-hover:text-signal-ai transition-colors">
             {project.title}
           </h3>
           <p className="text-slate mt-1 max-w-2xl">{project.summary}</p>
         </div>
         <div
           className="shrink-0 self-start sm:self-center text-2xl leading-none transition-transform duration-200 text-slate"
-          style={{ transform: open ? "rotate(45deg)" : "rotate(0deg)" }}
           aria-hidden="true"
         >
-          +
+          {open ? "−" : "+"}
         </div>
       </button>
 
@@ -54,7 +53,7 @@ export function ProjectRow({ project }: { project: Project }) {
         id={panelId}
         role="region"
         hidden={!open}
-        className="pb-8 grid gap-6 sm:grid-cols-[minmax(0,1fr)_220px]"
+        className="project-details pb-8 grid gap-6 sm:grid-cols-[minmax(0,1fr)_220px]"
       >
         <div className="space-y-5">
           {project.problem && (
@@ -122,14 +121,14 @@ export function ProjectRow({ project }: { project: Project }) {
           </div>
         </div>
 
-        <div className="space-y-4">
-          <div className="aspect-video rounded-lg border border-line bg-white/50 flex items-center justify-center text-xs text-slate font-mono">
+          <div className="space-y-4">
+          <div className="aspect-video border border-line bg-paper flex items-center justify-center text-xs text-slate font-mono overflow-hidden">
             {project.coverImageUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={project.coverImageUrl}
                 alt={`Screenshot of ${project.title}`}
-                className="h-full w-full object-cover rounded-lg"
+                className="h-full w-full object-cover"
               />
             ) : (
               "Screenshot pending"

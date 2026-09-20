@@ -12,6 +12,8 @@ import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 
+const themeScript = `(() => { const saved = localStorage.getItem("portfolio-theme"); const theme = saved || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); document.documentElement.dataset.theme = theme; })()`;
+
 export const metadata: Metadata = {
   title: "Abhay Chand — AI Engineer",
   description:
@@ -24,6 +26,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className="h-full antialiased"
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="min-h-full flex flex-col bg-paper text-ink">
         <a
           href="#main-content"
@@ -31,11 +36,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-        <SiteHeader />
+        <div className="site-shell">
+          <SiteHeader />
         <main id="main-content" className="flex-1">
           {children}
         </main>
         <SiteFooter />
+        </div>
       </body>
     </html>
   );

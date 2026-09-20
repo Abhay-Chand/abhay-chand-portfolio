@@ -31,27 +31,37 @@ npm run dev
 Visit `http://localhost:3000` for the public site and
 `http://localhost:3000/admin` for the CMS.
 
-**Default admin login** (seeded): `abhay@example.com` / `changeme123`.
+Set the admin email and password in `.env` before running the seed command:
 
-**Change this immediately:**
-
-```bash
-npm run admin:set-password -- you@realdomain.com "a-strong-new-password"
+```
+ADMIN_EMAIL=you@realdomain.com
+ADMIN_PASSWORD=<a-strong-password>
 ```
 
-This updates the login email and password together. Log in again with the
-new credentials afterward.
+To change the credentials later:
+
+```bash
+npm run admin:set-password
+```
+
+This reads the values from `.env` and updates the login email and password
+together. Log in again with the new credentials afterward.
 
 ### Environment variables
 
-Required, in `.env`:
+Required variables, in `.env`:
 
 ```
 SESSION_SECRET="<random 32+ byte hex string>"
+ADMIN_EMAIL="you@realdomain.com"
+ADMIN_PASSWORD="<a-strong-password>"
 ```
 
+See `.env.example` for the variable names without local credentials. Never
+commit `.env` or a production secret to the repository.
+
 Generate a fresh `SESSION_SECRET` before deploying anywhere real —
-the one in this project was generated for local development only:
+the local development value should never be reused:
 
 ```bash
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"

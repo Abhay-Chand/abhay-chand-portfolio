@@ -1,28 +1,30 @@
 import Link from "next/link";
+import { ThemeToggle } from "./theme-toggle";
 
 export function SiteHeader() {
   return (
-    <header className="border-b border-line">
-      <div className="mx-auto max-w-5xl px-6 flex items-center justify-between h-16">
+    <header className="site-header">
+      <div className="section-wrap site-header-inner">
         <Link
           href="/"
-          className="font-display text-lg tracking-tight hover:opacity-70 transition-opacity"
+          className="brand-mark"
         >
-          Abhay Chand
+          <span>Abhay Chand</span>
         </Link>
-        <nav aria-label="Primary" className="flex items-center gap-4 sm:gap-6 text-sm">
-          <Link href="/#work" className="hidden sm:inline hover:opacity-70 transition-opacity">
+        <nav aria-label="Primary" className="site-nav">
+          <Link href="/#work" className="nav-link">
             Work
           </Link>
-          <Link href="/#experience" className="hidden sm:inline hover:opacity-70 transition-opacity">
+          <Link href="/#experience" className="nav-link nav-wide">
             Experience
           </Link>
-          <Link href="/#skills" className="hidden sm:inline hover:opacity-70 transition-opacity">
+          <Link href="/#skills" className="nav-link nav-wide">
             Skills
           </Link>
+          <ThemeToggle />
           <Link
             href="/#contact"
-            className="rounded-full border border-ink px-4 py-1.5 hover:bg-ink hover:text-paper transition-colors"
+            className="nav-contact"
           >
             Contact
           </Link>

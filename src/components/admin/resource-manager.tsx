@@ -23,8 +23,24 @@ export function ResourceManager({ resource }: { resource: string }) {
   }, [resource]);
 
   useEffect(() => {
-    load();
-  }, [load]);
+    let cancelled = false;
+
+    async function loadInitialItems() {
+      const res = await fetch(`/api/admin/content/${resource}`);
+      if (cancelled) return;
+      if (!res.ok) {
+        setError("Could not load content.");
+        return;
+      }
+      const data = await res.json();
+      if (!cancelled) setItems(data.items);
+    }
+
+    void loadInitialItems();
+    return () => {
+      cancelled = true;
+    };
+  }, [resource]);
 
   if (!items) {
     return <p className="text-slate text-sm">Loading…</p>;

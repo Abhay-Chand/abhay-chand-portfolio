@@ -25,9 +25,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-data/*.db-wal
-data/*.db-shm
-
 # Environment variables
 .env
 .env.local
@@ -37,3 +34,8 @@ data/*.db-shm
 data/*.db
 data/*.db-wal
 data/*.db-shm
+
+# Runtime uploads; keep only the seeded assets required by the repository
+public/uploads/*
+!public/uploads/profile-photo.jpg
+!public/uploads/e35bff1c-15a9-4a4a-91af-7a1deae24239.pdf
