@@ -21,7 +21,7 @@ type ResourceConfig = {
 export const RESOURCES: Record<string, ResourceConfig> = {
   profile: { table: profile, jsonFields: ["focusAreas"], orderable: false, singleton: true },
   experience: { table: experiences, jsonFields: ["highlights"], orderable: true, singleton: false },
-  projects: { table: projects, jsonFields: ["techStack", "links"], orderable: true, singleton: false },
+  projects: { table: projects, jsonFields: ["techStack", "links", "galleryImages"], orderable: true, singleton: false },
   skills: { table: skillGroups, jsonFields: ["skills"], orderable: true, singleton: false },
   certifications: { table: certifications, jsonFields: [], orderable: true, singleton: false },
   achievements: { table: achievements, jsonFields: [], orderable: true, singleton: false },

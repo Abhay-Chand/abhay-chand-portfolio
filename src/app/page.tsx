@@ -30,7 +30,6 @@ export default async function Home() {
 
   const aiProjects = projects.filter((project) => project.category === "ai");
   const dataProjects = projects.filter((project) => project.category === "data");
-  const featuredProject = aiProjects[0];
 
   return (
     <div>
@@ -69,10 +68,9 @@ export default async function Home() {
       <section id="work" className="section-wrap section-rule pb-24 pt-20 scroll-mt-20">
         <div className="section-kicker"><span>02 / Selected work</span><h2>Built with intent.</h2></div>
         <p className="mt-5 max-w-xl text-slate">Systems, experiments, and products shaped around a real problem first, then the right technical architecture.</p>
-        {featuredProject && <div className="project-feature"><div className="mb-5"><CategoryTag category={featuredProject.category} /></div><ProjectRow project={featuredProject} defaultOpen /></div>}
         <div className="mt-14">
           <div className="mb-3 flex items-center justify-between"><CategoryTag category="ai" /><span className="font-mono text-xs text-slate">AI / GenAI</span></div>
-          {aiProjects.filter((project) => project.id !== featuredProject?.id).map((project) => <ProjectRow key={project.id} project={project} />)}
+          {aiProjects.map((project) => <ProjectRow key={project.id} project={project} />)}
           <div className="mb-3 mt-12 flex items-center justify-between"><CategoryTag category="data" /><span className="font-mono text-xs text-slate">Data / Analytics</span></div>
           {dataProjects.map((project) => <ProjectRow key={project.id} project={project} />)}
           {projects.length === 0 && <p className="text-sm text-slate">No published projects yet.</p>}
@@ -94,12 +92,42 @@ export default async function Home() {
 
       <section id="skills" className="section-wrap section-rule pb-24 pt-20 scroll-mt-20">
         <div className="section-kicker"><span>04 / Capabilities</span><h2>The working toolkit.</h2></div>
-        <div className="skills-grid">{skillGroups.map((group) => <div className="skill-group" key={group.id}><h3>{group.name}</h3><p>{group.skills.join("  ·  ")}</p></div>)}</div>
+        <div className="skills-grid">{skillGroups.map((group) => <div className="skill-group" key={group.id}><h3>{group.name}</h3><div className="skill-tags">{group.skills.map((skill) => <span key={skill} className="skill-tag">{skill}</span>)}</div></div>)}</div>
       </section>
 
       {(certifications.length > 0 || achievements.length > 0) && <section className="section-wrap section-rule credentials-grid">
-        {certifications.length > 0 && <div><p className="eyebrow">05 / Credentials</p><h2 className="mt-4 font-display text-4xl tracking-tight">Learning, formalized.</h2><ul className="credential-list">{certifications.map((cert) => <li key={cert.id}><span className="text-sm">{cert.name}</span><small>{cert.issuer}{cert.dateEarned ? ` · ${cert.dateEarned}` : ""}</small></li>)}</ul></div>}
-        {achievements.length > 0 && <div><p className="eyebrow">Recognition</p><ul className="credential-list mt-6">{achievements.map((achievement) => <li key={achievement.id}><span className="text-sm font-medium">{achievement.title}</span>{achievement.description && <p className="mt-2 text-sm leading-relaxed text-slate">{achievement.description}</p>}</li>)}</ul></div>}
+        {certifications.length > 0 && <div><p className="eyebrow">05 / Credentials</p><h2 className="mt-4 font-display text-4xl tracking-tight">Learning, formalized.</h2><ul className="credential-list">{certifications.map((cert) => {
+          const content = <>
+            <span className="text-sm">{cert.name}</span>
+            <small>{cert.issuer}{cert.dateEarned ? ` · ${cert.dateEarned}` : ""}</small>
+          </>;
+
+          return (
+            <li key={cert.id}>
+              {cert.url ? (
+                <a href={cert.url} target="_blank" rel="noreferrer" className="credential-link" aria-label={`Open credential: ${cert.name}`}>
+                  {content}
+                </a>
+              ) : content}
+            </li>
+          );
+        })}</ul></div>}
+        {achievements.length > 0 && <div><p className="eyebrow">Recognition</p><ul className="credential-list mt-6">{achievements.map((achievement) => {
+          const content = <>
+            <span className="text-sm font-medium">{achievement.title}</span>
+            {achievement.description && <p className="mt-2 text-sm leading-relaxed text-slate">{achievement.description}</p>}
+          </>;
+
+          return (
+            <li key={achievement.id}>
+              {achievement.url ? (
+                <a href={achievement.url} target="_blank" rel="noreferrer" className="credential-link" aria-label={`Open achievement: ${achievement.title}`}>
+                  {content}
+                </a>
+              ) : content}
+            </li>
+          );
+        })}</ul></div>}
       </section>}
 
       <section id="contact" className="contact-band scroll-mt-20"><div className="section-wrap"><p className="eyebrow">06 / Contact</p><h2 className="contact-title mt-6">Let&apos;s build something that holds up.</h2><p className="contact-copy">I&apos;m open to discussing AI engineering roles, thoughtful product collaborations, and systems where the details matter.</p><div className="contact-links">

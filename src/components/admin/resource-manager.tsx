@@ -75,7 +75,13 @@ export function ResourceManager({ resource }: { resource: string }) {
   const emptyValues: Record<string, unknown> = Object.fromEntries(
     config.fields.map((f) => [
       f.key,
-      f.type === "boolean" ? true : f.type === "stringList" ? [] : f.type === "linksObject" ? {} : "",
+      f.type === "boolean"
+        ? true
+        : f.type === "stringList" || f.type === "imageList"
+          ? []
+          : f.type === "linksObject"
+            ? {}
+            : "",
     ])
   );
 

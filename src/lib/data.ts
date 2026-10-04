@@ -43,6 +43,7 @@ export async function getPublishedProjects() {
     ...r,
     techStack: JSON.parse(r.techStack) as string[],
     links: JSON.parse(r.links) as { github?: string; live?: string; other?: string },
+    galleryImages: JSON.parse(r.galleryImages ?? "[]") as string[],
   }));
 }
 

@@ -67,6 +67,13 @@ export function ResourceField({ field, value, onChange }: Props) {
           onChange={onChange}
         />
       );
+    case "imageList":
+      return (
+        <ImageListField
+          value={Array.isArray(value) ? (value as string[]) : []}
+          onChange={onChange}
+        />
+      );
     case "linksObject":
       return (
         <LinksObjectField
@@ -90,6 +97,14 @@ export function ResourceField({ field, value, onChange }: Props) {
       return (
         <UploadField
           kind="file"
+          value={typeof value === "string" ? value : ""}
+          onChange={onChange}
+        />
+      );
+    case "video":
+      return (
+        <UploadField
+          kind="video"
           value={typeof value === "string" ? value : ""}
           onChange={onChange}
         />
@@ -213,12 +228,100 @@ function LinksObjectField({
   );
 }
 
+function ImageListField({
+  value,
+  onChange,
+}: {
+  value: string[];
+  onChange: (v: string[]) => void;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleFilesSelected(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? []);
+    if (!files.length) return;
+
+    setUploading(true);
+    setError(null);
+
+    try {
+      const uploadedUrls: string[] = [];
+      for (const file of files) {
+        const formData = new FormData();
+        formData.append("file", file);
+        const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error ?? `Upload failed for ${file.name}.`);
+        }
+        const data = await res.json();
+        uploadedUrls.push(data.url);
+      }
+      onChange([...value, ...uploadedUrls]);
+      e.target.value = "";
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Upload failed.");
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  return (
+    <div>
+      {value.length > 0 && (
+        <div className="mb-3 flex flex-wrap gap-2">
+          {value.map((url, index) => (
+            <div key={`${url}-${index}`} className="relative h-20 w-20 overflow-hidden rounded border border-line bg-white/40">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={url} alt="Project gallery" className="h-full w-full object-cover" />
+              <button
+                type="button"
+                onClick={() => onChange(value.filter((_, i) => i !== index))}
+                className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/70 text-[10px] text-white"
+                aria-label="Remove image"
+              >
+                ×
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+      <div className="flex items-center gap-3">
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          disabled={uploading}
+          className="rounded border border-ink px-3 py-2 text-sm hover:bg-ink hover:text-paper transition-colors disabled:opacity-50"
+        >
+          {uploading ? "Uploading…" : "Upload images"}
+        </button>
+        {value.length > 0 && (
+          <button type="button" onClick={() => onChange([])} className="text-sm text-slate hover:opacity-70">
+            Clear all
+          </button>
+        )}
+      </div>
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        multiple
+        onChange={handleFilesSelected}
+        className="hidden"
+      />
+      {error && <p role="alert" className="text-sm text-red-700 mt-1">{error}</p>}
+    </div>
+  );
+}
+
 function UploadField({
   kind,
   value,
   onChange,
 }: {
-  kind: "image" | "file";
+  kind: "image" | "file" | "video";
   value: string;
   onChange: (v: string) => void;
 }) {
@@ -286,7 +389,13 @@ function UploadField({
       <input
         ref={inputRef}
         type="file"
-        accept={kind === "image" ? "image/jpeg,image/png,image/webp" : "application/pdf"}
+        accept={
+          kind === "image"
+            ? "image/jpeg,image/png,image/webp"
+            : kind === "video"
+              ? "video/mp4,video/webm,video/quicktime"
+              : "application/pdf"
+        }
         onChange={handleFileSelected}
         className="hidden"
       />

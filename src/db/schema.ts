@@ -53,6 +53,8 @@ export const projects = sqliteTable("projects", {
   techStack: text("tech_stack").notNull().default("[]"), // JSON string[]
   links: text("links").notNull().default("{}"), // JSON {github?, live?, other?}
   coverImageUrl: text("cover_image_url"),
+  galleryImages: text("gallery_images").notNull().default("[]"), // JSON string[]
+  videoUrl: text("video_url"),
   featured: integer("featured", { mode: "boolean" }).notNull().default(false),
   published: integer("published", { mode: "boolean" }).notNull().default(true),
   sortOrder: integer("sort_order").notNull().default(0),

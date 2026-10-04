@@ -3,7 +3,9 @@ export type FieldType =
   | "textarea"
   | "boolean"
   | "image"
+  | "video"
   | "file"
+  | "imageList"
   | "stringList"
   | "linksObject"
   | "select";
@@ -94,7 +96,9 @@ export const RESOURCE_UI: Record<string, ResourceUIConfig> = {
       { key: "outcome", label: "Outcome", type: "textarea" },
       { key: "techStack", label: "Tech stack", type: "stringList" },
       { key: "links", label: "Links", type: "linksObject" },
-      { key: "coverImageUrl", label: "Cover image", type: "image" },
+      { key: "coverImageUrl", label: "Cover image", type: "image", helpText: "Primary hero image for the project card." },
+      { key: "galleryImages", label: "Project gallery", type: "imageList", helpText: "Upload multiple images for the slideshow. PNG/JPG/WebP only; up to 8 MB each." },
+      { key: "videoUrl", label: "Project video", type: "video", helpText: "Optional MP4/WebM/QuickTime video; up to 50 MB." },
       { key: "featured", label: "Featured", type: "boolean" },
       { key: "published", label: "Published", type: "boolean" },
     ],
